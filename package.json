@@ -19,12 +19,14 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21",
+    "@types/express-validator": "^3.0.0",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.2.0",
@@ -40,7 +42,10 @@
     "rules": {
       "import/order": "off",
       "import/first": "off",
-      "n/prefer-global/process": ["error", "always"]
+      "n/prefer-global/process": [
+        "error",
+        "always"
+      ]
     }
   }
 }

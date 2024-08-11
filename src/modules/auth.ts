@@ -12,7 +12,7 @@ export const createToken = ({id, name}: Pick<User, 'id' | 'name'>) => {
 }
 
 export const protectMiddleware = (
-  request: Request & {user?: User},
+  request: Request & {user?: Pick<User, 'id' | 'name'>},
   response: Response,
   next: NextFunction,
 ) => {
@@ -29,8 +29,14 @@ export const protectMiddleware = (
 
   try {
     const tokenPayload = jwt.verify(token, process.env.JWT_SECRET)
-    console.log('tokenPayload', tokenPayload)
-    request.user = tokenPayload
+
+    if (typeof tokenPayload === 'object') {
+      request.user = {
+        id: tokenPayload.id as string,
+        name: tokenPayload.name as string,
+      }
+    }
+
     next()
   } catch {
     return response.status(401).send('Unauthorized')

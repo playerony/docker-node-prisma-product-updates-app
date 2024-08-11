@@ -1,24 +1,107 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {Router as createRouter} from 'express'
+import {body, param} from 'express-validator'
+import {handleExpressValidatorErrors} from './modules/middleware.js'
 
 const router = createRouter()
 
-router.get('/product', (request, response) => {})
-router.get('/product/:id', (request, response) => {})
-router.post('/product', (request, response) => {})
-router.put('/product/:id', (request, response) => {})
-router.delete('/product/:id', (request, response) => {})
+/**
+ * Product routes
+ */
 
-router.get('/update', (request, response) => {})
-router.get('/update/:id', (request, response) => {})
-router.post('/update', (request, response) => {})
-router.put('/update/:id', (request, response) => {})
-router.delete('/update/:id', (request, response) => {})
+router.get('/product', () => {})
+router.get(
+  '/product/:id',
+  [param('id').isUUID(), handleExpressValidatorErrors],
+  () => {},
+)
+router.post('/product', () => {})
+router.put(
+  '/product/:id',
+  [param('id').isUUID(), body('name').isString(), handleExpressValidatorErrors],
+  () => {},
+)
+router.delete(
+  '/product/:id',
+  [param('id').isUUID(), handleExpressValidatorErrors],
+  () => {},
+)
 
-router.get('/update-point', (request, response) => {})
-router.get('/update-point/:id', (request, response) => {})
-router.post('/update-point', (request, response) => {})
-router.put('/update-point/:id', (request, response) => {})
-router.delete('/update-point/:id', (request, response) => {})
+/**
+ * Update routes
+ */
+
+router.get('/update', () => {})
+router.get(
+  '/update/:id',
+  [param('id').isUUID(), handleExpressValidatorErrors],
+  () => {},
+)
+router.post(
+  '/update',
+  [
+    body('title').isString(),
+    body('content').isString(),
+    body('asset').isString().optional(),
+    body('version').isString().optional(),
+    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']),
+    handleExpressValidatorErrors,
+  ],
+  () => {},
+)
+router.put(
+  '/update/:id',
+  [
+    param('id').isUUID(),
+    body('title').isString().optional(),
+    body('content').isString().optional(),
+    body('asset').isString().optional(),
+    body('version').isString().optional(),
+    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']),
+    handleExpressValidatorErrors,
+  ],
+  () => {},
+)
+router.delete(
+  '/update/:id',
+  [param('id').isUUID(), handleExpressValidatorErrors],
+  () => {},
+)
+
+/**
+ * Update point routes
+ */
+
+router.get('/update-point', () => {})
+router.get(
+  '/update-point/:id',
+  [param('id').isUUID(), handleExpressValidatorErrors],
+  () => {},
+)
+router.post(
+  '/update-point',
+  [
+    body('name').isString(),
+    body('description').isString(),
+    body('updateId').exists().isString(),
+    handleExpressValidatorErrors,
+  ],
+  () => {},
+)
+router.put(
+  '/update-point/:id',
+  [
+    param('id').isUUID(),
+    body('name').isString().optional(),
+    body('description').isString().optional(),
+    handleExpressValidatorErrors,
+  ],
+  () => {},
+)
+router.delete(
+  '/update-point/:id',
+  [param('id').isUUID(), handleExpressValidatorErrors],
+  () => {},
+)
 
 export default router
