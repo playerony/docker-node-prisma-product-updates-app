@@ -1,5 +1,15 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "target": "ES2023",
+    "module": "NodeNext",
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     "esModuleInterop": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
   }
 }

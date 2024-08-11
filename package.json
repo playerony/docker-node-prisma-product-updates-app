@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "start": "tsx ./src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "xo",
+    "lint:fix": "xo --fix"
   },
   "author": "playerony",
   "license": "ISC",
   "description": "",
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "dependencies": {
     "@prisma/client": "^5.18.0",
     "bcrypt": "^5.1.1",
@@ -19,9 +23,24 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^22.2.0",
     "prisma": "^5.18.0",
     "tsx": "^4.17.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "xo": "^0.59.3"
+  },
+  "xo": {
+    "space": 2,
+    "prettier": true,
+    "semicolon": false,
+    "rules": {
+      "import/order": "off",
+      "import/first": "off",
+      "n/prefer-global/process": ["error", "always"]
+    }
   }
 }
