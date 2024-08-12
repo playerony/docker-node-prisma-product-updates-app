@@ -2,6 +2,7 @@
 import {Router as createRouter} from 'express'
 import {body, param} from 'express-validator'
 import {handleExpressValidatorErrors} from './modules/middleware.js'
+import * as productHandlers from './handlers/product.js'
 
 const router = createRouter()
 
@@ -9,22 +10,31 @@ const router = createRouter()
  * Product routes
  */
 
-router.get('/product', () => {})
+// @ts-expect-error User will be added to the request object by the auth middleware
+router.get('/product', productHandlers.getProducts)
 router.get(
   '/product/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  productHandlers.getProductById,
 )
-router.post('/product', () => {})
+router.post(
+  '/product',
+  [body('name').isString(), handleExpressValidatorErrors],
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  productHandlers.createProduct,
+)
 router.put(
   '/product/:id',
   [param('id').isUUID(), body('name').isString(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  productHandlers.updateProduct,
 )
 router.delete(
   '/product/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  productHandlers.deleteProduct,
 )
 
 /**

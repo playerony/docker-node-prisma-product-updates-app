@@ -3,6 +3,7 @@
     "strict": true,
     "target": "ES2023",
     "module": "NodeNext",
+    "moduleResolution": "Node16",
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,

@@ -28,6 +28,8 @@ model Product {
   userId    String
   belongsTo User     @relation(fields: [userId], references: [id])
   updates   Update[]
+
+  @@unique([id, userId])
 }
 
 enum UPDATE_STATUSES {

@@ -45,7 +45,8 @@
       "n/prefer-global/process": [
         "error",
         "always"
-      ]
+      ],
+      "@typescript-eslint/naming-convention": "off"
     }
   }
 }
