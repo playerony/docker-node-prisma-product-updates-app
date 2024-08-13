@@ -3,6 +3,7 @@ import {Router as createRouter} from 'express'
 import {body, param} from 'express-validator'
 import {handleExpressValidatorErrors} from './modules/middleware.js'
 import * as productHandlers from './handlers/product.js'
+import * as updateHandlers from './handlers/update.js'
 
 const router = createRouter()
 
@@ -41,23 +42,27 @@ router.delete(
  * Update routes
  */
 
-router.get('/update', () => {})
+// @ts-expect-error User will be added to the request object by the auth middleware
+router.get('/update', updateHandlers.getUpdatesForAllProducts)
 router.get(
   '/update/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updateHandlers.getUpdateById,
 )
 router.post(
   '/update',
   [
     body('title').isString(),
     body('content').isString(),
+    body('productId').isString(),
     body('asset').isString().optional(),
     body('version').isString().optional(),
-    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']),
+    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']).optional(),
     handleExpressValidatorErrors,
   ],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updateHandlers.createUpdate,
 )
 router.put(
   '/update/:id',
@@ -67,15 +72,17 @@ router.put(
     body('content').isString().optional(),
     body('asset').isString().optional(),
     body('version').isString().optional(),
-    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']),
+    body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']).optional(),
     handleExpressValidatorErrors,
   ],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updateHandlers.updateUpdate,
 )
 router.delete(
   '/update/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updateHandlers.deleteUpdate,
 )
 
 /**

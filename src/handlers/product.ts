@@ -6,16 +6,13 @@ export const getProducts = async (
   request: Request & {user: User},
   response: Response,
 ) => {
-  const foundUser = await prisma.user.findUniqueOrThrow({
+  const products = await prisma.product.findMany({
     where: {
-      id: request.user.id,
-    },
-    include: {
-      products: true,
+      userId: request.user.id,
     },
   })
 
-  response.json({data: foundUser.products})
+  response.json({data: products})
 }
 
 export const getProductById = async (
