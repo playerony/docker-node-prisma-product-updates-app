@@ -1,6 +1,7 @@
 import {type UpdatePoint, type User} from '@prisma/client'
 import {type Request, type Response} from 'express'
 import prisma from '../modules/db.js'
+import {NotFoundError} from '../modules/error.js'
 
 export const getUpdatePoints = async (
   request: Request & {user: User},
@@ -23,7 +24,7 @@ export const getUpdatePointById = async (
   request: Request & {user: User},
   response: Response,
 ) => {
-  const foundUpdate = await prisma.updatePoint.findUniqueOrThrow({
+  const foundUpdate = await prisma.updatePoint.findUnique({
     where: {
       id: request.params.id,
       AND: {
@@ -35,6 +36,9 @@ export const getUpdatePointById = async (
       },
     },
   })
+  if (!foundUpdate) {
+    throw new NotFoundError('Update point not found')
+  }
 
   response.json({data: foundUpdate})
 }
@@ -53,10 +57,8 @@ export const createUpdatePoint = async (
       },
     },
   })
-
   if (!foundUpdate) {
-    response.status(404).json({error: 'Update not found'})
-    return
+    throw new NotFoundError('Update not found')
   }
 
   const createdUpdatePoint = await prisma.updatePoint.create({
@@ -89,8 +91,7 @@ export const updateUpdatePoint = async (
     },
   })
   if (!foundUpdatePoint) {
-    response.status(404).json({error: 'Update not found'})
-    return
+    throw new NotFoundError('Update point not found')
   }
 
   const updatedUpdatePoint = await prisma.updatePoint.update({
@@ -127,8 +128,7 @@ export const deleteUpdatePoint = async (
     },
   })
   if (!foundUpdatePoint) {
-    response.status(404).json({error: 'Update point not found'})
-    return
+    throw new NotFoundError('Update point not found')
   }
 
   const deletedUpdate = await prisma.updatePoint.delete({

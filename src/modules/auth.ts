@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import type {Request, Response, NextFunction} from 'express'
 import type {User} from '@prisma/client'
+import {UnauthorizedError} from './error.js'
 
 export const createToken = ({id, name}: Pick<User, 'id' | 'name'>) => {
   const token = jwt.sign({id, name}, process.env.JWT_SECRET, {
@@ -19,12 +20,12 @@ export const protectMiddleware = (
   const fullToken = request.headers.authorization
 
   if (!fullToken) {
-    return response.status(401).send('Unauthorized')
+    throw new UnauthorizedError('Unauthorized')
   }
 
   const [prefix, token] = fullToken.split(' ')
   if (prefix !== 'Bearer') {
-    return response.status(401).send('Unauthorized')
+    throw new UnauthorizedError('Unauthorized')
   }
 
   try {
@@ -39,7 +40,7 @@ export const protectMiddleware = (
 
     next()
   } catch {
-    return response.status(401).send('Unauthorized')
+    throw new UnauthorizedError('Unauthorized')
   }
 }
 

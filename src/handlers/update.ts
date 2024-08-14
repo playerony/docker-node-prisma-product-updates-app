@@ -1,6 +1,7 @@
 import {type User, type Update} from '@prisma/client'
 import {type Request, type Response} from 'express'
 import prisma from '../modules/db.js'
+import {NotFoundError} from '../modules/error.js'
 
 export const getUpdates = async (
   request: Request & {user: User},
@@ -21,11 +22,14 @@ export const getUpdateById = async (
   request: Request & {user: User},
   response: Response,
 ) => {
-  const foundUpdate = await prisma.update.findUniqueOrThrow({
+  const foundUpdate = await prisma.update.findUnique({
     where: {
       id: request.params.id,
     },
   })
+  if (!foundUpdate) {
+    throw new NotFoundError('Update not found')
+  }
 
   response.json({data: foundUpdate})
 }
@@ -44,10 +48,8 @@ export const createUpdate = async (
       },
     },
   })
-
   if (!foundProduct) {
-    response.status(404).json({error: 'Product not found'})
-    return
+    throw new NotFoundError('Product not found')
   }
 
   const createdUpdate = await prisma.update.create({
@@ -79,8 +81,7 @@ export const updateUpdate = async (
     },
   })
   if (!foundUpdate) {
-    response.status(404).json({error: 'Update not found'})
-    return
+    throw new NotFoundError('Update not found')
   }
 
   const updatedUpdate = await prisma.update.update({
@@ -108,10 +109,8 @@ export const deleteUpdate = async (
       },
     },
   })
-
   if (!foundUpdate) {
-    response.status(404).json({error: 'Update not found'})
-    return
+    throw new NotFoundError('Update not found')
   }
 
   const deletedUpdate = await prisma.update.delete({

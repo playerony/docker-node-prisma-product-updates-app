@@ -1,6 +1,7 @@
 import {type Product, type User} from '@prisma/client'
 import {type Request, type Response} from 'express'
 import prisma from '../modules/db.js'
+import {NotFoundError} from '../modules/error.js'
 
 export const getProducts = async (
   request: Request & {user: User},
@@ -19,7 +20,7 @@ export const getProductById = async (
   request: Request & {user: User},
   response: Response,
 ) => {
-  const foundProduct = await prisma.product.findUniqueOrThrow({
+  const foundProduct = await prisma.product.findUnique({
     where: {
       id_userId: {
         id: request.params.id,
@@ -27,6 +28,9 @@ export const getProductById = async (
       },
     },
   })
+  if (!foundProduct) {
+    throw new NotFoundError('Product not found')
+  }
 
   response.json({data: foundProduct})
 }
