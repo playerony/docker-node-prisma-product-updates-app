@@ -1,8 +1,8 @@
-import {type Product, type User, type Update} from '@prisma/client'
+import {type User, type Update} from '@prisma/client'
 import {type Request, type Response} from 'express'
 import prisma from '../modules/db.js'
 
-export const getUpdatesForAllProducts = async (
+export const getUpdates = async (
   request: Request & {user: User},
   response: Response,
 ) => {

@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {Router as createRouter} from 'express'
 import {body, param} from 'express-validator'
 import {handleExpressValidatorErrors} from './modules/middleware.js'
 import * as productHandlers from './handlers/product.js'
 import * as updateHandlers from './handlers/update.js'
+import * as updatePointHandlers from './handlers/update-point.js'
 
 const router = createRouter()
 
@@ -43,7 +43,7 @@ router.delete(
  */
 
 // @ts-expect-error User will be added to the request object by the auth middleware
-router.get('/update', updateHandlers.getUpdatesForAllProducts)
+router.get('/update', updateHandlers.getUpdates)
 router.get(
   '/update/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
@@ -89,21 +89,24 @@ router.delete(
  * Update point routes
  */
 
-router.get('/update-point', () => {})
+// @ts-expect-error User will be added to the request object by the auth middleware
+router.get('/update-point', updatePointHandlers.getUpdatePoints)
 router.get(
   '/update-point/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updatePointHandlers.getUpdatePointById,
 )
 router.post(
   '/update-point',
   [
     body('name').isString(),
+    body('updateId').isString(),
     body('description').isString(),
-    body('updateId').exists().isString(),
     handleExpressValidatorErrors,
   ],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updatePointHandlers.createUpdatePoint,
 )
 router.put(
   '/update-point/:id',
@@ -113,12 +116,14 @@ router.put(
     body('description').isString().optional(),
     handleExpressValidatorErrors,
   ],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updatePointHandlers.updateUpdatePoint,
 )
 router.delete(
   '/update-point/:id',
   [param('id').isUUID(), handleExpressValidatorErrors],
-  () => {},
+  // @ts-expect-error User will be added to the request object by the auth middleware
+  updatePointHandlers.deleteUpdatePoint,
 )
 
 export default router
