@@ -39,8 +39,7 @@ export const signIn = async (
       },
     })
     if (!foundUser) {
-      next(new UnauthorizedError('Invalid credentials'))
-      return
+      throw new UnauthorizedError('Invalid credentials')
     }
 
     const isPasswordValid = await comparePassword(
@@ -48,8 +47,7 @@ export const signIn = async (
       foundUser.password,
     )
     if (!isPasswordValid) {
-      next(new UnauthorizedError('Invalid credentials'))
-      return
+      throw new UnauthorizedError('Invalid credentials')
     }
 
     const token = createToken({id: foundUser.id, name: foundUser.name})
